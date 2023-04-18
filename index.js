@@ -4,7 +4,7 @@ var id = [];
 var voiceText = [];
 
 // 单次请求获取的数据量，10 25 50 100
-var page_size = 100;
+var page_size = 50;
 
 let searchContent = "";
 let searchDataResult = [];
@@ -106,12 +106,12 @@ async function get_all_base_info() {
     // 检索页面范围
     let page_scope = document.getElementById("page_scope").value;
     let start_page = 1;
-    let end_page = 2;
+    //let end_page = 3;
 
     let ret_nums = isValidFormat(page_scope);
     if(ret_nums) {
         start_page = ret_nums[0];
-        end_page = ret_nums[1];
+        let end_page = ret_nums[1];
     } else {
         console.log("页数范围格式非 数字-数字，使用默认配置");
     }
@@ -134,9 +134,9 @@ async function get_all_base_info() {
     let voice_num = Number.MAX_VALUE;
     let result = [];
 
-    let get_base_info_then = async function (page, start) {
+    let get_base_info_then = async function (page, end_page_in, start) {
         console.log(voice_num);
-        let message = `请求第${page}页，起始坐标${start}。`
+        let message = `请求第${page}页/${end_page_in}，起始坐标${start}。`
         if (start > 0) message += `音频总数=${voice_num}`
 
         console.log(message);
@@ -144,32 +144,49 @@ async function get_all_base_info() {
 
         const [data, _voice_num, str] = await get_base_info(content, page, start);
         voice_num = _voice_num
+        end_page = Math.ceil(voice_num / page_size);
         result.push(...data);
         // 追加入文本框
         document.getElementById("textarea1").value += str;
         clear_alert();
     }
+    
+    
+    
+    
     try {
         // let promise_list = [];
 
         var loop_num = 0;
-        // 用户设定的页面范围溢出
-        if((voice_num / page_size) < end_page) {
-            loop_num = (voice_num / page_size) - start_page - 1;
-        } else {
+        
+        end_page = Math.ceil(voice_num / page_size);
+        if (end_page > start_page) {
             loop_num = end_page - start_page;
         }
+        // 用户设定的页面范围溢出
+        //if((voice_num / page_size) < end_page) {
+        //    loop_num = (voice_num / page_size) - start_page - 1;
+        //} else {
+        //    loop_num = end_page - start_page;
+        //}
+        //await get_base_info_then(page,end_page, start);
+        //end_page = Math.ceil(voice_num / page_size);
 
         for (let i = 0; i <= loop_num; i++) {
             // promise_list.push(get_base_info_then(page, start));
-            await get_base_info_then(page, start);
+            await get_base_info_then(page,end_page, start);
             page += 1;
             start += page_size;
+            end_page = Math.ceil(voice_num / page_size);
+            if(page > end_page){
+                break;
+            }
         }
         // let result_list = await Promise.all(promise_list)
 
         searchDataResult = result;
-        show_alert("请求完成。");
+        show_alert("最終頁為" + end_page.toString()+"请求完成。");
+        //show_alert();
     } catch (e) {
         console.log("发生异常:", e);
         show_alert('发生异常', e);

@@ -14,7 +14,7 @@ include('./jsSHA/src/sha.js');
 include('./apiAuth.js');
 
 let API_URL = "https://api.voistock.com/voice/voiceDownload.php"
-let uid = ""
+let uid = "64328ae33e41863aeb5bfb42"
 
 function download(id, filename) {
     let skey = createSkey()
@@ -42,6 +42,7 @@ function download(id, filename) {
             console.log('File saved.', filename);
         });
 }
+
 
 
 const optionDefinitions = [
@@ -83,7 +84,9 @@ if (id_txt && data_json) {
     for (let id of id_list) {
         // console.log(id)
         let data = data_map[id];
-        let filename = path.join(output_dir, `${data['characternames']}_${data['voiceText']}_${id}.mp3`);
+        //let filename = path.join(output_dir, `${data['characternames']}_${data['voiceText']}_${id}.mp3`);
+        let filename = path.join(output_dir, `${data['characternames']}_${id}.mp3`);
+        
         if (fs.existsSync(filename)) {
             console.log("File exists. Skip", filename)
         } else {

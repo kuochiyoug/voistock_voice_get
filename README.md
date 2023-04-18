@@ -1,65 +1,47 @@
-# 前言
+# Preface
 
-纯前端开发，用于便捷下载 https://www.voistock.com/ja/voicelist/index.php 的免费语音文件。
-运行index.html，用法应该一目了然了，可以看看源码，以上。
+This program is originally fork from Gitee  Ikaros/voistock站点voicelist页面免费音源检索并下载
+https://gitee.com/ikaros-521/voistock_voice_get
 
-## 🔗 在线体验网址
+I just modified a little bit and fix some bugs.
 
-github：[https://ikaros-521.gitee.io/voistock_voice_get](https://ikaros-521.gitee.io/voistock_voice_get)  
-gitee：[https://ikaros-521.gitee.io/voistock_voice_get](https://ikaros-521.gitee.io/voistock_voice_get)  
 
-## 📖 导出 data 文件格式
+## Following is translation from originally contents:
+
+This is a pure front-end development project that facilitates the downloading of free voice files from https://www.voistock.com/ja/voicelist/index.php. To use it, simply run index.html. The usage should be self-explanatory, and you can also refer to the source code if needed.
+
+## Data file format
 
 ```json5
 [
     {
         "id": "608f22a63e4186709c13f432",
-        // 语音id 
         "voiceText": "It&#39;s not fair, is",
-        // 语音文本
         "characternames": "美樹さやか",
-        // 语音角色
         "contentsName": "まどか☆マギカ",
-        // 作品标题
         "voiceEmotions": "クール、真剣、悲しみ、心配、安心、平穏、ほのぼの",
-        // 语音情感
         "voiceactnames": "Sarah Williams",
-        // 声优名
         "voiceLanguage": "jp",
-        // 语音语言
         "titleName": "劇場版 魔法少女まどか☆マギカ 始まりの物語"
-        // 作品标题
     },
     // .....
 ]
 ```
 
-## 💿 How to download the voice via console
+## How to download the voice via console 
+### !!! This way must be used with uid
 ```
 npm install 
-
 node download.js \
     --id-txt ./id_美樹さやか.txt \
     --data-json ./data_美樹さやか.json \
     --out-dir ./output \
-    --uid xxxxxx
+    --uid xxxxxx // This uid you have to find in the voistock through google chrome and press F12 to check your own.
 ```
 Async download. Very fast!
 
 Skip file if it exists.
 
 ### The name format of download file :
-`{characternames}_{voiceText}_{id}.mp3`. eg: `美樹さやか_なんだかマジカルな力が満ちてきた_5ab5b2d23e418626cd660c82.mp3`
+`{characternames}_{id}.mp3`. eg: `美樹さやか_5ab5b2d23e418626cd660c82.mp3`
 
-### !!! This way must be used with uid
-（todo）使用 `https://voice.voistock.com/mp3play.php` 接口可以不需要。
-
-## 🌸 致谢
-- [voistock.com](https://www.voistock.com/)
-
-## 📝 更新日志
-- 2023-04-04   
-  1、增加单次请求数量级至100条；  
-  2、新增音频范围和进度显示；  
-  3、优化说明文档；  
-  
